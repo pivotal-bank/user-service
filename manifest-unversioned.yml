@@ -10,4 +10,4 @@ applications:
 - name: users
   random-route: true
   path: libs/user-${version}.jar
-  services: [ traderdb, discovery-service, circuit-breaker-dashboard, config-server ]
+  services: [ traderdb, discovery-service, circuit-breaker-dashboard, config-server, zipkinRabbit ]
