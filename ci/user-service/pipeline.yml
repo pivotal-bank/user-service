@@ -24,7 +24,7 @@ jobs:
     resource: cf-env
     params:
       command: delete
-      app_name: user
+      app_name: users
       delete_mapped_routes: true
   - aggregate:
     - put: cf-delete-service
