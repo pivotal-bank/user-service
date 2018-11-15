@@ -16,12 +16,15 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.4.7"
     }
+
 }
 
 repositories {
     mavenLocal()
     mavenCentral()
 }
+
+
 
 
 apply plugin: 'java'
@@ -95,18 +98,18 @@ dependencies {
     // shared dependencies for all services
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
     implementation("io.pivotal.spring.cloud:spring-cloud-services-starter-config-client")
     implementation("io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry")
     implementation("io.pivotal.spring.cloud:spring-cloud-services-starter-circuit-breaker")
+    implementation("io.pivotal.spring.cloud:spring-cloud-sso-connector:2.1.3.RELEASE")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.7")
+    compileOnly('org.projectlombok:lombok:1.16.20')
+    runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
     //test packages
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.jayway.jsonpath:json-path")
-    // Runtime
-    runtime "org.hsqldb:hsqldb"
-    runtime "mysql:mysql-connector-java:5.1.47"
 
 }
 // process substitutions in yml files.
