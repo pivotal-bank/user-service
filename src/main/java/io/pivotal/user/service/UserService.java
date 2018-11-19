@@ -42,7 +42,6 @@ public class UserService {
 
     @PostConstruct
     public void init() {
-        scopes.setGroupId(scopes.getAdmin(), groupIdFor(scopes.getAdmin()));
         scopes.setGroupId(scopes.getAccountOpen(), groupIdFor(scopes.getAccountOpen()));
         scopes.setGroupId(scopes.getBuy(), groupIdFor(scopes.getBuy()));
         scopes.setGroupId(scopes.getPortfolioRead(), groupIdFor(scopes.getPortfolioRead()));
@@ -54,17 +53,13 @@ public class UserService {
         UaaCreateUserRequest uaaCreateUserRequest = UaaCreateUserRequestBuilder.withRegistrationRequest(registrationRequest).build();
         ResponseEntity<UaaUser> uaaUserResponseEntity = restTemplate.postForEntity(uaaTarget + "/Users", uaaCreateUserRequest, UaaUser.class);
         User user = UserBuilder.withUaaUser(uaaUserResponseEntity.getBody()).build();
-        assignUserToGroups(user, scopes.getAccountOpen(), scopes.getAdmin(), scopes.getBuy(), scopes.getSell(), scopes.getPortfolioRead(), scopes.getBank());
+        assignUserToGroups(user, scopes.getAccountOpen(), scopes.getBuy(), scopes.getSell(), scopes.getPortfolioRead(), scopes.getBank());
         return user;
     }
 
-    public User get(String email) {
-        ResponseEntity<UaaUsers> uaaUsersResponseEntity = restTemplate.getForEntity(uaaTarget + "/Users?filter=emails.value eq \"{email}\"", UaaUsers.class, email);
-        UaaUsers uaaUsers = uaaUsersResponseEntity.getBody();
-        if (CollectionUtils.isEmpty(uaaUsers.getResources())) {
-            throw new NoRecordsFoundException();
-        }
-        return UserBuilder.withUaaUser(uaaUsers.getResources().get(0)).build();
+    public User get(String id) {
+        ResponseEntity<UaaUser> uaaUsersResponseEntity = restTemplate.getForEntity(uaaTarget + "/Users/{id}", UaaUser.class, id);
+        return UserBuilder.withUaaUser(uaaUsersResponseEntity.getBody()).build();
     }
 
 

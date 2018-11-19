@@ -44,14 +44,14 @@ public class UserController {
     /**
      * REST call to retrieve the account with the given id as userId.
      *
-     * @param email The id of the user to retrieve.
+     * @param id The id of the user to retrieve.
      * @return The user object if found.
      */
-    @GetMapping("{email}")
+    @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User getUser(@PathVariable("email") String email) {
-        log.info("UserController.find: username=" + email);
-        return this.service.get(email);
+    public User getUser(@PathVariable("id") String id) {
+        log.info("UserController.find: username=" + id);
+        return this.service.get(id);
     }
 
     /**

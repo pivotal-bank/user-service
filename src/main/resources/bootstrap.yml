@@ -9,6 +9,7 @@ info:
     description: ${description}
     version: ${version}
 
+
 logging:
   level:
-    org.springframework.security: TRACE
+    org.springframework.security: DEBUG
