@@ -12,11 +12,9 @@ import java.util.Map;
 @ConfigurationProperties("scopes")
 public class Scopes {
 
-    private String admin;
-    private String buy;
-    private String sell;
-    private String portfolioRead;
-    private String accountOpen;
+    private String trade;
+    private String account;
+    private String portfolio;
     private String bank;
 
     private Map<String,String> groupIds = new HashMap<>();

@@ -1,6 +1,8 @@
 package io.pivotal.user.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,21 +13,27 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.*;
 
 @Configuration
-@EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private OAuth2ResourceServerProperties resourceServerProperties;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().headers().cacheControl().disable().and().authorizeRequests().anyRequest().authenticated();
+        http.csrf().disable().
+                headers().cacheControl().disable()
+                .and().authorizeRequests().anyRequest().fullyAuthenticated()
+                .and().oauth2ResourceServer().jwt().decoder(jwtDecoder());
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        //we don't need to secure the "register" endpoint
-        web.ignoring().antMatchers("/register/**");
+       web.ignoring().antMatchers("/users/register");
     }
 
     @Bean
@@ -38,6 +46,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public OAuth2RestTemplate oauth2RestTemplate(@Qualifier("uaaClientCredentials") ClientCredentialsResourceDetails oAuth2ProtectedResourceDetails) {
         return new OAuth2RestTemplate(oAuth2ProtectedResourceDetails);
+    }
+
+    private JwtDecoder jwtDecoder() {
+        String issuerUri = this.resourceServerProperties.getJwt().getIssuerUri();
+        NimbusJwtDecoderJwkSupport jwtDecoder =
+                (NimbusJwtDecoderJwkSupport) JwtDecoders.fromOidcIssuerLocation(issuerUri);
+        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
+        jwtDecoder.setJwtValidator(withIssuer);
+        return jwtDecoder;
     }
 
 }
