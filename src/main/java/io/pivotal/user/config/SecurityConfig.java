@@ -2,6 +2,7 @@ package io.pivotal.user.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().
                 headers().cacheControl().disable()
-                .and().authorizeRequests().anyRequest().fullyAuthenticated()
+                .and().authorizeRequests()
+                .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
+                .anyRequest().fullyAuthenticated()
                 .and().oauth2ResourceServer().jwt().decoder(jwtDecoder());
     }
 

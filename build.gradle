@@ -92,6 +92,7 @@ dependencyManagement {
     imports {
         mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:${springCloudServicesVersion}"
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        mavenBom 'org.springframework.cloud:spring-cloud-stream-dependencies:Fishtown.RC2'
     }
 }
 
@@ -108,6 +109,8 @@ dependencies {
     implementation("org.springframework.security:spring-security-oauth2-client")
     implementation("org.springframework.security:spring-security-oauth2-jose")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation('org.springframework.cloud:spring-cloud-stream')
+    implementation('org.springframework.cloud:spring-cloud-starter-stream-rabbit')
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.7")
     compileOnly('org.projectlombok:lombok:1.16.20')
     runtimeOnly("org.springframework.boot:spring-boot-devtools")

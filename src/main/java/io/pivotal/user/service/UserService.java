@@ -7,6 +7,7 @@ import io.pivotal.user.domain.uaa.*;
 import io.pivotal.user.domain.User;
 
 import io.pivotal.user.exception.NoRecordsFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ import java.util.Map;
  * @author Simon Rowe
  */
 @Service
+@Slf4j
 public class UserService {
 
     private static final Logger logger = LoggerFactory
@@ -42,7 +44,7 @@ public class UserService {
     @Autowired
     private Scopes scopes;
 
-    @Value("${targets.uaa}")
+    @Value("${targets.admin.uaa}")
     private String uaaTarget;
 
     @Value("${uaa.identity-zone-id}")
@@ -65,7 +67,6 @@ public class UserService {
     }
 
     public User get(String id) {
-
         ResponseEntity<UaaUser> uaaUsersResponseEntity = restTemplate.exchange(uaaTarget + "/Users/{id}", HttpMethod.GET, getEntityWithHeaders(null), UaaUser.class, id);
         return UserBuilder.withUaaUser(uaaUsersResponseEntity.getBody()).build();
     }
@@ -85,7 +86,7 @@ public class UserService {
 
     private HttpEntity getEntityWithHeaders(Object body) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Identity-Zone-Id", identityZoneId);
+        headers.set("X-Identity-Zone-Subdomain", identityZoneId);
         HttpEntity entity = new HttpEntity(body,headers);
         return entity;
     }
