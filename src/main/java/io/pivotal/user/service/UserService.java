@@ -9,6 +9,7 @@ import io.pivotal.user.domain.User;
 import io.pivotal.user.exception.NoRecordsFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +87,9 @@ public class UserService {
 
     private HttpEntity getEntityWithHeaders(Object body) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Identity-Zone-Subdomain", identityZoneId);
+        if (StringUtils.isNotBlank(identityZoneId)) {
+            headers.set("X-Identity-Zone-Subdomain", identityZoneId);
+        }
         HttpEntity entity = new HttpEntity(body,headers);
         return entity;
     }
