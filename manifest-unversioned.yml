@@ -11,5 +11,6 @@ applications:
     - circuit-breaker-dashboard
     - config-server
     - uaa-admin
+    - newrelic
   env:
     SPRING_PROFILES_ACTIVE: cloud
