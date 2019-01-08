@@ -19,6 +19,10 @@ buildscript {
 
 }
 
+plugins {
+    id 'net.ltgt.apt' version '0.15'
+}
+
 ext['spring-security.version'] = '5.1.1.RELEASE'
 
 repositories {
@@ -59,14 +63,8 @@ jacocoTestReport {
     group = "Reporting"
     description = "Generate Jacoco coverage reports after running tests."
     reports {
-
         csv.enabled false
-
-        html {
-            enabled true
-            destination "${buildDir}/reports/jacoco"
-        }
-
+        html.destination file("${buildDir}/jacocoHtml")
         xml.enabled false
     }
 
@@ -108,17 +106,20 @@ dependencies {
     implementation("org.springframework.security:spring-security-oauth2-resource-server")
     implementation("org.springframework.security:spring-security-oauth2-client")
     implementation("org.springframework.security:spring-security-oauth2-jose")
+    implementation("org.springframework.security.oauth:spring-security-oauth2")
+    implementation ('org.apache.commons:commons-lang3:3.8.1')
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation('org.springframework.cloud:spring-cloud-stream')
     implementation('org.springframework.cloud:spring-cloud-starter-stream-rabbit')
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.7")
+
     compileOnly('org.projectlombok:lombok:1.16.20')
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
     //test packages
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.jayway.jsonpath:json-path")
-
+    annotationProcessor("org.projectlombok:lombok:1.16.20")
 }
 // process substitutions in yml files.
 processResources {
@@ -130,4 +131,4 @@ jar { baseName = 'user' }
 description = "Micro-service to deal with accounts and user logins"
 
 
-task wrapper(type: Wrapper) { gradleVersion = '2.12' }
+task wrapper(type: Wrapper) { gradleVersion = '5.1' }

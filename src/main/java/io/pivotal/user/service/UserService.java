@@ -2,13 +2,10 @@ package io.pivotal.user.service;
 
 import io.pivotal.user.domain.RegistrationRequest;
 import io.pivotal.user.domain.Scopes;
+import io.pivotal.user.domain.User;
 import io.pivotal.user.domain.UserBuilder;
 import io.pivotal.user.domain.uaa.*;
-import io.pivotal.user.domain.User;
-
-import io.pivotal.user.exception.NoRecordsFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +16,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import javax.validation.Valid;
 import java.util.Map;
 
 /**
