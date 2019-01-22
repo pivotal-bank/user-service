@@ -1,0 +1,6 @@
+targets:
+  uaa: http://uaa.localhost.com
+
+spring:
+  sleuth:
+    enabled: false

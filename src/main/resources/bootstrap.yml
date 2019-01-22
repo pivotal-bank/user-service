@@ -8,3 +8,10 @@ info:
     name: ${name}
     description: ${description}
     version: ${version}
+
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+
